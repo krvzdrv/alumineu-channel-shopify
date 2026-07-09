@@ -1,75 +1,116 @@
 ```yaml
 repo: alumineu-channel-shopify
 agent: SHP-Storefront
-purpose: Будущий Shopify storefront (aluminus.store) — theme/app scaffold
-updated_at: 2026-07-08
+purpose: Shopify storefront + channel logic for US / American market (live)
+updated_at: 2026-07-09
 inbound:
   - source: alumineu-product-catalog (CAT · Forge)
-    what: product data (planned)
-    interface: Postgres view / CSV / repo read (planned)
-    auth: уточнить при первом подключении
+    what: product identity, content, prices for channel projection
+    interface: Postgres view / export / sync (уточнить актуальный path)
+    auth: per CAT contract / shared Supabase read if used
     env: []
     token_file: null
     access: read
-    status: planned
+    status: active
+  - source: Shopify Admin API
+    what: products, collections, orders, inventory, apps config
+    interface: REST / GraphQL Admin API
+    auth: env / private app token
+    env: [SHOPIFY_SHOP, SHOPIFY_ACCESS_TOKEN]
+    token_file: null
+    access: read+write
+    status: active
+  - source: Shopify Storefront API
+    what: catalog browse, cart, checkout session
+    interface: Storefront GraphQL
+    auth: storefront access token
+    env: [SHOPIFY_STOREFRONT_TOKEN]
+    token_file: null
+    access: read+write
+    status: active
 outbound:
-  - consumer: Shopify storefront customers
-    what: storefront products, cart, checkout (future)
-    interface: Shopify Storefront API (future)
+  - consumer: US storefront customers
+    what: storefront UX, cart, checkout
+    interface: Shopify Online Store / custom storefront
+    contract_ref: null
+    access: read+write
+  - consumer: Owner / ops
+    what: orders and channel ops surfaces in Shopify admin
+    interface: Shopify Admin
     contract_ref: null
     access: read+write
 stores:
-  - .env.example (env template)
-  - theme/app scaffold (planned)
+  - theme / app code (this repo and/or Shopify-hosted theme)
+  - .env / GitHub Secrets for SHOPIFY_* (never commit secrets)
+  - docs/REPO_DATA_CONTRACT.md — SSOT подключений
 ```
 
 ## Purpose
 
-Будущий Shopify storefront (aluminus.store). Repo сейчас — scaffold: нет theme/app кода, только env template (`.env.example`).
+`alumineu-channel-shopify` — **живой** Shopify-канал для американского рынка (US).
+Implementation storefront/channel; не product SSOT и не company OS.
+
+> **Owner note (2026-07-09):** US site raised via this channel.  
+> Агент SHP обязан сверить YAML/таблицы ниже с фактическими apps, scopes и sync path от CAT
+> и поправить `status`/env names в той же сессии, когда расхождение найдено.
 
 ## Inbound — откуда берём данные
 
 | Source | What | Interface | Auth/env | Access | Notes |
 |--------|------|-----------|----------|--------|-------|
-| CAT · Forge (alumineu-product-catalog) | product data | Postgres view / CSV / repo read | уточнить при первом подключении | read | planned — sync ещё не реализован |
+| CAT · Forge | product projection | view / export / sync | per CAT | read | Product SSOT остаётся в CAT |
+| Shopify Admin API | catalog ops, orders | Admin REST/GraphQL | `SHOPIFY_SHOP`, `SHOPIFY_ACCESS_TOKEN` | read+write | Имена env сверить с `.env.example` / Secrets |
+| Shopify Storefront API | storefront data | Storefront GraphQL | `SHOPIFY_STOREFRONT_TOKEN` | read+write | |
 
 ## Outbound — кому отдаём
 
-| Consumer | What | Interface | Contract_ref | Access | Notes |
-|----------|------|-----------|--------------|--------|-------|
-| Shopify storefront customers | storefront products, cart, checkout | Shopify Storefront API | — | read+write | future — storefront не запущен |
+| Consumer | What | Interface | Access | Notes |
+|----------|------|-----------|--------|-------|
+| US customers | storefront | Shopify storefront | read+write | Live US market |
+| Owner / ops | orders, apps | Shopify Admin | read+write | |
 
 ## Internal stores
 
-- `.env.example` — required Shopify vars (`SHOPIFY_*`)
-- theme/app scaffold (planned, ещё нет кода)
+- Theme/app и channel automation в этом repo (и/или Shopify-hosted theme)
+- Secrets только в `.env` / GitHub Secrets
+- Этот контракт — SSOT «к чему подключены»
 
 ## Data flow
 
 ```
-CAT (product data, planned)
-   │
-   ▼
-[alumineu-channel-shopify]  (scaffold)
-   │  Theme + Admin API sync (planned)
-   ▼
-Shopify storefront customers (future)
+CAT (product master) ──read──► SHP · Storefront ──► Shopify (US)
+                                      │
+                                      ├── Admin API
+                                      └── Storefront API
+                                              │
+                                              ▼
+                                         US customers
 ```
 
 ## Boundaries
 
 **Делает:**
-- Shopify storefront theme/app (planned)
-- Admin API sync, webhooks (planned)
-- Env template для `SHOPIFY_*`
+- US Shopify storefront / theme / apps / webhooks
+- Channel sync от CAT (не дублируя product SSOT)
+- Актуализация этого контракта при смене API
 
 **Не делает:**
-- Product SSOT in this repo (CAT)
-- Web SEO execution (WEB)
+- Product master / price facts (CAT)
+- Pricing policy (PRC)
+- ETL CRM/WMS (DAT)
+- OS canons / business model / BPMN
 
 ## Connection cheat-sheet
 
 ### Shopify Admin API
-- **Where token lives:** `SHOPIFY_*` vars в локальном `.env` (см. `.env.example`; **не коммитить**).
-- **Connect (~1 min):** `cp .env.example .env`, fill `SHOPIFY_SHOP`, `SHOPIFY_ACCESS_TOKEN` (Admin API token из Shopify Partner dashboard → App → API credentials). Admin API access scoped per app.
-- **Refresh when expired:** Admin API access tokens долгоживущие; rotate через Shopify Partner dashboard → App → API credentials → reinstall app if revoked. Уточнить конкретный flow при первом подключении (storefront ещё не создан).
+- **Env:** `SHOPIFY_SHOP`, `SHOPIFY_ACCESS_TOKEN` (точные имена — сверить `.env.example`)
+- **Где:** локальный `.env` / GitHub Secrets — **не коммитить**
+- **Connect:** Partner/Admin → App → API credentials → scopes для US store
+- **Refresh:** rotate token в Shopify Admin → обновить secret → smoke Admin GraphQL
+
+### Shopify Storefront API
+- **Env:** `SHOPIFY_STOREFRONT_TOKEN` (сверить)
+- **Refresh:** Headless/Storefront API token в admin → обновить env
+
+### CAT
+- Read-only product projection; при смене контракта — handoff CAT + обновить Inbound здесь

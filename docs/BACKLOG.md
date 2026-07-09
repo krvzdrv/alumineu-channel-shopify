@@ -1,10 +1,8 @@
 # Backlog — SHP · Storefront
 
-**SSOT задач этого репозитория.**
-Dispatch — **чат** + `AGENTS.md`. Память работ — здесь.
+**SSOT задач этого репозитория.** Dispatch — чат + `AGENTS.md`.
 
-Канон: [`alumineu-os/docs/REPO_BACKLOG_CANON.md`](https://github.com/krvzdrv/alumineu-os/blob/main/docs/REPO_BACKLOG_CANON.md)  
-Портфель: [`alumineu-os/docs/REPO_PORTFOLIO.md`](https://github.com/krvzdrv/alumineu-os/blob/main/docs/REPO_PORTFOLIO.md)
+Канон: [`REPO_BACKLOG_CANON`](https://github.com/krvzdrv/alumineu-os/blob/main/docs/REPO_BACKLOG_CANON.md) · Портфель: [`REPO_PORTFOLIO`](https://github.com/krvzdrv/alumineu-os/blob/main/docs/REPO_PORTFOLIO.md)
 
 ## Now
 
@@ -16,11 +14,13 @@ Dispatch — **чат** + `AGENTS.md`. Память работ — здесь.
 
 | ID | Title |
 |----|-------|
-| SHP-001 | Decision gate: когда стартовать theme/app (нужен stable CAT projection) |
-| SHP-002 | Scaffold theme + Admin API sync от CAT (после gate) |
+| SHP-001 | Сверить `REPO_DATA_CONTRACT.md` с живым US Shopify (apps, scopes, env names, theme location) |
+| SHP-002 | Стабильный catalog sync path от CAT (projection → Shopify) без дубля SSOT |
+| SHP-003 | Документировать order/webhook flow (что остаётся в Shopify vs что уходит в DAT) |
 
 ## Done (последние 2–4 недели)
 
 | ID | Title | Closed |
 |----|-------|--------|
-| SHP-DATA-01 | REPO_DATA_CONTRACT.md + Data & API в AGENTS.md | 2026-07-09 |
+| SHP-STATUS-01 | Hub/AGENTS: Production US market (не scaffold) | 2026-07-09 |
+| SHP-DATA-01 | REPO_DATA_CONTRACT.md + Data & API | 2026-07-09 |

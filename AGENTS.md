@@ -10,19 +10,23 @@
 
 ## За что отвечаю (бизнес)
 
-- Будущий Shopify storefront (aluminus.store)
-- Channel-specific theme/app — **scaffold**
+- Shopify storefront и channel logic для **US / американского рынка** (живой канал)
+- Theme/app, Admin/Storefront API, webhooks, channel automation
+- Не product SSOT (CAT), не OS-правила (GOV), не бизнес-модель (MDL)
 
 ---
 
 ## Data & API
 
-Полный контракт подключений: **`docs/REPO_DATA_CONTRACT.md`** (SSOT; обновлять в той же сессии при изменении подключений).
+Полный контракт подключений: **`docs/REPO_DATA_CONTRACT.md`** (SSOT).
 
-- **Inbound:** CAT (product data, planned)
-- **Outbound:** Shopify storefront customers (future)
-- **Internal SSOT:** `.env.example` (env template), theme/app scaffold (planned)
-- **Граница данных:** SHP хранит storefront scaffold, не product SSOT
+**Правило:** новое/изменённое API → обновить контракт + эту сводку в той же сессии (иначе не Done).
+Канон: `alumineu-os/docs/REPO_DATA_CONTRACT_CANON.md` §0.
+
+- **Inbound:** CAT (product projections); Shopify Admin/Storefront APIs
+- **Outbound:** US storefront customers; channel events per contract
+- **Internal SSOT:** theme/app, Shopify apps config, env (`SHOPIFY_*`)
+- **Граница данных:** channel execution only — product master в CAT
 
 Подключение и обновление токенов — в `docs/REPO_DATA_CONTRACT.md` → § Connection cheat-sheet.
 
@@ -30,8 +34,8 @@
 
 ## Умею делать (capabilities)
 
-- *(planned)* Theme, Admin API sync, webhooks
-- `.env.example` documents required Shopify vars
+- Shopify theme / app / Admin API sync / webhooks (US storefront)
+- Держать `docs/REPO_DATA_CONTRACT.md` в sync с реальными apps и scopes
 
 ---
 
@@ -39,35 +43,41 @@
 
 | Доступ | Read | Write | Где настроить |
 |--------|------|-------|---------------|
-| Shopify Admin API | ✓ (planned) | ✓ (planned) | `SHOPIFY_*` in `.env.example` |
+| Shopify Admin API | ✓ | ✓ | `SHOPIFY_*` в `.env` / Secrets |
+| Shopify Storefront API | ✓ | ✓ (cart/checkout) | `SHOPIFY_*` |
+| CAT product data | ✓ | ✗ | per contract / handoff CAT |
 
-Секреты: только GitHub Secrets / локальный `.env` (не коммитить). Способ подключения и обновления токенов — в `docs/REPO_DATA_CONTRACT.md`.
+Секреты: только GitHub Secrets / локальный `.env` (не коммитить).
 
 ---
 
 ## Ключевая документация
 
-- `README.md`, `AGENTS.md`
-- Hub `HANDOFF_PROMPTS` — SHP sections when added
+- `README.md`, `docs/REPO_DATA_CONTRACT.md`, `docs/BACKLOG.md`
+- Hub: `REPO_PORTFOLIO.md`, `HANDOFF_PROMPTS.md`
 
 ---
 
 ## Состояние repo
 
-**Scaffold** — No theme/app code yet; env template only.
+**Production** — US / американский рынок live (storefront).  
+Контракт API обязан отражать фактические apps/tokens (см. Next в backlog).
 
 ---
 
 ## Граница (не делаю в этом repo)
 
-- Product SSOT in this repo
-- Web SEO execution (WEB)
+- Product SSOT / price facts (CAT)
+- Pricing policy (PRC)
+- ETL Planfix/MoySklad (DAT)
+- Organic SEO / Next.js PL site (WEB)
+- OS canons / business model / BPMN
 
 ---
 
 ## Нужен другой агент?
 
-Сформируй **Handoff** для Owner (не правь чужой repo):
+Сформируй **Handoff** для Owner:
 → `alumineu-os/docs/HANDOFF_PROMPTS.md` — секция «SHP → CAT»
 
 ---
@@ -76,25 +86,24 @@
 
 | Файл | Назначение |
 |------|------------|
-| `docs/BACKLOG.md` | Агент ведёт **свои** задачи; обновлять после сессии |
-
-Канон бэклога: `alumineu-os/docs/REPO_BACKLOG_CANON.md`.
+| `docs/BACKLOG.md` | Свои задачи; обновлять после сессии |
 
 ---
 
 ## Конец сессии
 
-- [ ] Бизнес-результат, не рефакторинг структуры
+- [ ] Бизнес-результат
+- [ ] Если трогали API — `REPO_DATA_CONTRACT.md` + § Data & API обновлены
 - [ ] `git commit` + `git push`
-- [ ] Обнови § Changelog, § Data & API / `docs/REPO_DATA_CONTRACT.md`, § Состояние при изменениях
+- [ ] Changelog при изменениях
 
 ---
 
 ## Гигиена (раз в 2–4 недели)
 
-- [ ] Push веток с работой
-- [ ] Удалить ephemeral notes старше 30 дней
-- [ ] Актуализировать `docs/REPO_DATA_CONTRACT.md` и § Состояние repo
+- [ ] Push веток
+- [ ] Сверить `REPO_DATA_CONTRACT.md` с живым Shopify admin (apps, scopes)
+- [ ] Ephemeral notes > 30 дней
 
 ---
 
@@ -102,6 +111,6 @@
 
 | Дата | Изменение |
 |------|-----------|
-| 2026-07-08 | AGENTS.md + docs/REPO_DATA_CONTRACT.md (chat-first, role-based, no people/Project) |
-| 2026-05-29 | Initial AGENTS.md (docs-only operating system) |
-| 2026-05-19 | Полный профиль: capabilities, доступы, docs index, состояние repo |
+| 2026-07-09 | Status: Production US market (not scaffold); Data & API hard rule |
+| 2026-07-09 | REPO_DATA_CONTRACT.md initial |
+| 2026-05-29 | Initial AGENTS.md |
