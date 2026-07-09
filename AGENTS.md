@@ -1,10 +1,10 @@
 # AGENTS.md — alumineu-channel-shopify
 
-**Агент:** SHP · Storefront  
+**Агент:** SHP · Storefront
 **Префикс (GitHub):** `[SHP]`
 
-> **Старт:** прочитай этот файл. **GitHub Project не используется** как очередь.  
-> Hub: [AGENT_BOUNDARY_CANON](https://github.com/krvzdrv/alumineu-os/blob/main/docs/AGENT_BOUNDARY_CANON.md) · [HANDOFF_PROMPTS](https://github.com/krvzdrv/alumineu-os/blob/main/docs/HANDOFF_PROMPTS.md) · [AGENTS_MD_CANON](https://github.com/krvzdrv/alumineu-os/blob/main/docs/AGENTS_MD_CANON.md)
+> **Старт:** прочитай этот файл целиком. Управление — chat-first.
+> Hub: [AGENT_BOUNDARY_CANON](https://github.com/krvzdrv/alumineu-os/blob/main/docs/AGENT_BOUNDARY_CANON.md) · [HANDOFF_PROMPTS](https://github.com/krvzdrv/alumineu-os/blob/main/docs/HANDOFF_PROMPTS.md) · [AGENTS_MD_CANON](https://github.com/krvzdrv/alumineu-os/blob/main/docs/AGENTS_MD_CANON.md) · [REPO_DATA_CONTRACT_CANON](https://github.com/krvzdrv/alumineu-os/blob/main/docs/REPO_DATA_CONTRACT_CANON.md)
 
 ---
 
@@ -12,24 +12,27 @@
 
 - Будущий Shopify storefront (aluminus.store)
 - Channel-specific theme/app — **scaffold**
+
 ---
 
-## Откуда беру данные (upstream)
+## Data & API
 
-| Источник | Repo / система | Что именно |
-|----------|----------------|------------|
-| CAT · Forge | alumineu-product-catalog | product data (planned) |
----
+Полный контракт подключений: **`docs/REPO_DATA_CONTRACT.md`** (SSOT; обновлять в той же сессии при изменении подключений).
 
-## Кому отдаю (downstream)
+- **Inbound:** CAT (product data, planned)
+- **Outbound:** Shopify storefront customers (future)
+- **Internal SSOT:** `.env.example` (env template), theme/app scaffold (planned)
+- **Граница данных:** SHP хранит storefront scaffold, не product SSOT
 
-- Shopify storefront customers (future)
+Подключение и обновление токенов — в `docs/REPO_DATA_CONTRACT.md` → § Connection cheat-sheet.
+
 ---
 
 ## Умею делать (capabilities)
 
 - *(planned)* Theme, Admin API sync, webhooks
 - `.env.example` documents required Shopify vars
+
 ---
 
 ## Доступы (имена env / API — без значений)
@@ -38,7 +41,7 @@
 |--------|------|-------|---------------|
 | Shopify Admin API | ✓ (planned) | ✓ (planned) | `SHOPIFY_*` in `.env.example` |
 
-Секреты: GitHub Secrets / локальный `.env` (не коммитить). OAuth Google часто через `alumineu-finance-ops` (`GOOGLE_AUTH_ROOT`).
+Секреты: только GitHub Secrets / локальный `.env` (не коммитить). Способ подключения и обновления токенов — в `docs/REPO_DATA_CONTRACT.md`.
 
 ---
 
@@ -46,6 +49,7 @@
 
 - `README.md`, `AGENTS.md`
 - Hub `HANDOFF_PROMPTS` — SHP sections when added
+
 ---
 
 ## Состояние repo
@@ -54,17 +58,19 @@
 
 ---
 
-## Никогда не делаю в этом repo
+## Граница (не делаю в этом repo)
 
 - Product SSOT in this repo
 - Web SEO execution (WEB)
+
 ---
 
 ## Нужен другой агент?
 
-Сформируй **Handoff** для владельца (не правь чужой repo):  
+Сформируй **Handoff** для Owner (не правь чужой repo):
 → `alumineu-os/docs/HANDOFF_PROMPTS.md` — секция «SHP → CAT»
 
+---
 
 ## Бэклог (только этот repo)
 
@@ -72,7 +78,7 @@
 |------|------------|
 | `docs/BACKLOG.md` | Агент ведёт **свои** задачи; обновлять после сессии |
 
-**Не открывать** GitHub Project #2. Канон: hub `docs/REPO_BACKLOG_CANON.md`.
+Канон бэклога: `alumineu-os/docs/REPO_BACKLOG_CANON.md`.
 
 ---
 
@@ -80,7 +86,7 @@
 
 - [ ] Бизнес-результат, не рефакторинг структуры
 - [ ] `git commit` + `git push`
-- [ ] Обнови § Changelog и § Умею делать / Доступы / Состояние при изменениях
+- [ ] Обнови § Changelog, § Data & API / `docs/REPO_DATA_CONTRACT.md`, § Состояние при изменениях
 
 ---
 
@@ -88,7 +94,7 @@
 
 - [ ] Push веток с работой
 - [ ] Удалить ephemeral notes старше 30 дней
-- [ ] Актуализировать upstream/downstream и § Состояние repo
+- [ ] Актуализировать `docs/REPO_DATA_CONTRACT.md` и § Состояние repo
 
 ---
 
@@ -96,5 +102,6 @@
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-08 | AGENTS.md + docs/REPO_DATA_CONTRACT.md (chat-first, role-based, no people/Project) |
 | 2026-05-29 | Initial AGENTS.md (docs-only operating system) |
 | 2026-05-19 | Полный профиль: capabilities, доступы, docs index, состояние repo |
