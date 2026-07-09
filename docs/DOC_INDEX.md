@@ -39,6 +39,17 @@
 
 - пока тонкий repo — не плодить docs до появления SSOT storefront
 
+
+## Разовая работа (не SSOT)
+
+| Куда | Когда |
+|------|--------|
+| Чат | Срез / таблица / анализ по умолчанию |
+| `scratch/` | Локальный файл для прогона (не в git) |
+| `docs/adhoc/` | Только если Owner сказал сохранить (+ `expires:`) |
+
+Канон: [`EPHEMERAL_WORK_CANON`](https://github.com/krvzdrv/alumineu-os/blob/main/docs/EPHEMERAL_WORK_CANON.md). Уборка: `./scripts/adhoc_cleanup.sh`.
+
 ## Правила
 
 - Не плодить новые `.md`, если можно обновить SSOT из таблицы выше.

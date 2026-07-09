@@ -4,3 +4,8 @@
 *.log
 node_modules/
 .shopify/
+
+# Ephemeral one-off work (EPHEMERAL_WORK_CANON)
+scratch/*
+!scratch/README.md
+.tmp/

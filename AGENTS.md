@@ -112,6 +112,8 @@
 
 ## Гигиена (раз в 2–4 недели)
 
+- [ ] `./scripts/adhoc_cleanup.sh` + очистить `scratch/`
+
 - [ ] Push веток
 - [ ] Сверить `REPO_DATA_CONTRACT.md` с живым Shopify admin (apps, scopes)
 - [ ] Ephemeral notes > 30 дней
@@ -122,6 +124,7 @@
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-09 | Ephemeral: scratch/ + docs/adhoc/ + EPHEMERAL_WORK_CANON |
 | 2026-07-09 | Язык: hub COMMUNICATION_LANGUAGE_CANON + DOC_INDEX |
 | 2026-07-09 | Status: Production US market (not scaffold); Data & API hard rule |
 | 2026-07-09 | REPO_DATA_CONTRACT.md initial |
